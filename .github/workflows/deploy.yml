@@ -44,7 +44,7 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm run build:pages
+        run: pnpm vite build --base=/memento/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
