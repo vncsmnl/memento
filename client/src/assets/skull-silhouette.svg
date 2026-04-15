@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" fill="none">
+  <rect width="1200" height="1200" fill="transparent"/>
+  <g opacity="0.17" transform="translate(150 100)">
+    <ellipse cx="450" cy="390" rx="320" ry="300" fill="#3e2f25"/>
+    <path d="M220 550C220 680 300 760 450 760C600 760 680 680 680 550V670C680 730 630 790 570 800V860H330V800C270 790 220 730 220 670V550Z" fill="#3e2f25"/>
+    <ellipse cx="345" cy="400" rx="88" ry="106" fill="#f9f7f2"/>
+    <ellipse cx="555" cy="400" rx="88" ry="106" fill="#f9f7f2"/>
+    <path d="M450 470L400 560H500L450 470Z" fill="#f9f7f2"/>
+    <rect x="345" y="800" width="210" height="88" rx="12" fill="#3e2f25"/>
+    <rect x="366" y="812" width="20" height="64" rx="6" fill="#f9f7f2"/>
+    <rect x="402" y="812" width="20" height="64" rx="6" fill="#f9f7f2"/>
+    <rect x="438" y="812" width="20" height="64" rx="6" fill="#f9f7f2"/>
+    <rect x="474" y="812" width="20" height="64" rx="6" fill="#f9f7f2"/>
+    <rect x="510" y="812" width="20" height="64" rx="6" fill="#f9f7f2"/>
+  </g>
+</svg>

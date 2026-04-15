@@ -123,6 +123,14 @@
     @apply bg-background text-foreground;
     font-family: 'Crimson Text', serif;
     background-color: #f9f7f2;
+    background-image:
+      radial-gradient(circle at 18% 15%, rgba(107, 83, 68, 0.1) 0%, rgba(107, 83, 68, 0) 45%),
+      radial-gradient(circle at 82% 86%, rgba(70, 54, 43, 0.08) 0%, rgba(70, 54, 43, 0) 40%),
+      url("./assets/skull-silhouette.svg");
+    background-size: auto, auto, min(72vw, 760px);
+    background-position: top left, bottom right, center 12%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
 
   button:not(:disabled),

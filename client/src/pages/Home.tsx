@@ -126,7 +126,7 @@ export default function Home() {
       <header className="pt-16 pb-8 px-4 border-b border-border/40">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-6xl md:text-7xl font-light mb-6" style={{ fontFamily: "'Cormorant Garamond', serif", color: '#2c2c2c' }}>
-            Memento Mori
+            /meˈmenˌto ˈmore/
           </h1>
           <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent mb-8" />
           <p className="text-lg italic text-foreground/70 mb-2" style={{ fontFamily: "'Crimson Text', serif" }}>
