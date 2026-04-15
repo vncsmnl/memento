@@ -36,34 +36,36 @@ export const getMemoryKey = (year: number, month: number) =>
 // Dica para imagens locais: coloque em client/public/memories e use src como "/memories/foto.jpg".
 export const MEMORY_ENTRIES: MemoryEntryInput[] = [
     {
-        year: 2026,
-        month: 3,
-        title: "Defesa da minha tese de mestrado",
-        summary: "Esse eu defendi minha tese de mestrado, e passei no processo seletivo para doutorado. Foi um mês de muita emoção e conquista.",
-        tags: ["estudos", "aprendizado"],
+        year: 2024,
+        month: 2,
+        title: "PPGi UnB - Início do mestrado",
+        summary: "Esse mês eu comecei meu mestrado no PPGi da UnB. Foi um mês de muita expectativa e aprendizado, conhecendo novos colegas e professores.",
+        tags: ["estudos", "vida"],
         blocks: [
             {
                 type: "text",
-                text: "Esse mês foi um marco importante na minha jornada acadêmica. Depois de anos de dedicação, finalmente defendi minha tese de mestrado. Foi um momento de muita emoção, orgulho e alívio. A defesa foi desafiadora, mas consegui apresentar meu trabalho com confiança e responder às perguntas da banca examinadora. Estou muito feliz por ter alcançado essa conquista e grato por todo o apoio que recebi ao longo do caminho.",
+                text: "Foi um mês bem intenso, com muitas reuniões, leituras e adaptações. Mas muito feliz por essa conquista e animado para os próximos anos de pesquisa.",
             },
+            {
+                type: "image",
+                src: "./memories/ppgi_mestrado.jpg",
+                alt: "Foto do Resultado.",
+                caption: "Foto do Resultado.",
+            },
+        ],
+    },
+    {
+        year: 2026,
+        month: 3,
+        title: "Defesa da minha tese de mestrado",
+        summary: "Esse mês eu defendi minha tese de mestrado, e passei no processo seletivo para doutorado. Foi um mês de muita emoção e conquista.",
+        tags: ["estudos", "aprendizado"],
+        blocks: [
             {
                 type: "image",
                 src: "./memories/defesa_mestrado.png",
                 alt: "Foto da banca examinadora durante a defesa da tese.",
                 caption: "Foto da banca examinadora durante a defesa da tese.",
-            },
-        ],
-    },
-    {
-        year: 2022,
-        month: 11,
-        title: "Reconexao com o que importa",
-        summary: "Tempo de introspeccao, familia e reavaliacao de prioridades.",
-        tags: ["familia", "vida"],
-        blocks: [
-            {
-                type: "text",
-                text: "Esse mes me lembrou que nao existe produtividade sem significado. Voltei para o essencial.",
             },
         ],
     },
