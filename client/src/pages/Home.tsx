@@ -1,4 +1,13 @@
 import { useEffect, useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { MEMORY_INDEX, getMemoryKey, type MemoryEntry } from '@/data/memories';
 
 /**
  * DESIGN PHILOSOPHY: Gregoriano Filosófico - Clássico Minimalista
@@ -17,6 +26,14 @@ interface LifeStats {
   percentageLived: number;
   nextBirthdayDate: Date;
   daysUntilBirthday: number;
+}
+
+interface MonthCellData {
+  index: number;
+  isLived: boolean;
+  date: Date;
+  memoryKey: string;
+  memory?: MemoryEntry;
 }
 
 const PHILOSOPHICAL_QUOTES = [
@@ -46,6 +63,7 @@ export default function Home() {
   const [stats, setStats] = useState<LifeStats | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [quote, setQuote] = useState(PHILOSOPHICAL_QUOTES[0]);
+  const [selectedMonth, setSelectedMonth] = useState<MonthCellData | null>(null);
 
   // Data de nascimento: 07/01/1998
   const birthDate = new Date(1998, 0, 7); // Janeiro = 0
@@ -112,10 +130,20 @@ export default function Home() {
     );
   }
 
-  const months = Array.from({ length: lifeSpanMonths }, (_, i) => ({
-    index: i,
-    isLived: i < stats.monthsLived,
-  }));
+  const months = Array.from({ length: lifeSpanMonths }, (_, i) => {
+    const monthDate = new Date(birthDate);
+    monthDate.setMonth(birthDate.getMonth() + i);
+
+    const memoryKey = getMemoryKey(monthDate.getFullYear(), monthDate.getMonth() + 1);
+
+    return {
+      index: i,
+      isLived: i < stats.monthsLived,
+      date: monthDate,
+      memoryKey,
+      memory: MEMORY_INDEX[memoryKey],
+    };
+  });
   const monthRows = Array.from({ length: lifeSpanMonths / 12 }, (_, rowIndex) =>
     months.slice(rowIndex * 12, rowIndex * 12 + 12)
   );
@@ -198,21 +226,33 @@ export default function Home() {
               <div key={yearIndex} className="flex items-center gap-3">
                 <div className="grid gap-1.5 flex-1" style={{ gridTemplateColumns: 'repeat(12, minmax(0, 1fr))' }}>
                   {row.map((month) => (
-                    <div
+                    <button
                       key={month.index}
+                      type="button"
+                      onClick={() => setSelectedMonth(month)}
+                      aria-label={`Abrir memoria de ${month.date.toLocaleString('pt-BR', {
+                        month: 'long',
+                        year: 'numeric',
+                      })}`}
                       className={`
-                        month-cell aspect-square cursor-pointer rounded-[10px]
+                        month-cell aspect-square rounded-[10px]
                         ${month.isLived
                           ? 'month-cell--lived bg-accent/80 border border-accent/60 shadow-sm'
                           : 'month-cell--future bg-muted/40 border border-border/60'
                         }
+                        ${month.memory ? 'ring-2 ring-offset-2 ring-offset-background ring-[#47623E]' : ''}
                       `}
                       style={{
                         backgroundColor: month.isLived ? '#6b5344' : '#d4cfc8',
                         borderColor: month.isLived ? '#5a4535' : '#c8c1b8',
                       }}
-                      title={`Mês ${month.index + 1} - Ano ${yearIndex}`}
-                    />
+                      title={`${month.date.toLocaleString('pt-BR', {
+                        month: 'long',
+                        year: 'numeric',
+                      })}${month.memory ? ` - ${month.memory.title}` : ''}`}
+                    >
+                      <span className="sr-only">{month.memory ? month.memory.title : 'Sem memoria cadastrada'}</span>
+                    </button>
                   ))}
                 </div>
                 <span className="w-16 shrink-0 text-right text-[11px] uppercase tracking-wider text-foreground/45">
@@ -231,6 +271,10 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <div className="w-5 h-5" style={{ backgroundColor: '#d4cfc8', border: '1px solid #c8c1b8' }} />
               <p className="text-sm text-foreground" style={{ fontFamily: "'Crimson Text', serif" }}>Mês futuro</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-5 h-5 rounded-[3px]" style={{ border: '2px solid #47623E' }} />
+              <p className="text-sm text-foreground" style={{ fontFamily: "'Crimson Text', serif" }}>Mês com memória</p>
             </div>
           </div>
         </div>
@@ -254,6 +298,82 @@ export default function Home() {
           </p>
         </div>
       </footer>
+
+      <Dialog open={Boolean(selectedMonth)} onOpenChange={(open) => !open && setSelectedMonth(null)}>
+        <DialogContent className="max-w-3xl p-0 overflow-hidden border-[#cebfae] bg-[#f9f7f2]">
+          {selectedMonth && (
+            <>
+              <DialogHeader className="px-6 pt-6 pb-3 border-b border-[#d8cec2]">
+                <DialogTitle className="text-3xl font-semibold" style={{ fontFamily: "'Cormorant Garamond', serif", color: '#2c2c2c' }}>
+                  {selectedMonth.memory?.title ?? 'Sem memória cadastrada'}
+                </DialogTitle>
+                <DialogDescription className="text-foreground/70" style={{ fontFamily: "'Crimson Text', serif" }}>
+                  {selectedMonth.date.toLocaleString('pt-BR', { month: 'long', year: 'numeric' })}
+                </DialogDescription>
+              </DialogHeader>
+
+              <ScrollArea className="max-h-[70vh]">
+                <div className="px-6 py-5 space-y-5">
+                  {selectedMonth.memory ? (
+                    <>
+                      {selectedMonth.memory.summary && (
+                        <p className="text-base leading-relaxed text-foreground/85" style={{ fontFamily: "'Crimson Text', serif" }}>
+                          {selectedMonth.memory.summary}
+                        </p>
+                      )}
+
+                      {selectedMonth.memory.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {selectedMonth.memory.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-2 py-1 text-xs uppercase tracking-wider rounded-full border border-[#b79f8d] text-[#5a4535]"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      <div className="space-y-5">
+                        {selectedMonth.memory.blocks.map((block, blockIndex) =>
+                          block.type === 'text' ? (
+                            <p
+                              key={`${selectedMonth.memoryKey}-text-${blockIndex}`}
+                              className="text-base leading-relaxed text-foreground/90 whitespace-pre-line"
+                              style={{ fontFamily: "'Crimson Text', serif" }}
+                            >
+                              {block.text}
+                            </p>
+                          ) : (
+                            <figure key={`${selectedMonth.memoryKey}-image-${blockIndex}`} className="space-y-2">
+                              <img
+                                src={block.src}
+                                alt={block.alt}
+                                loading="lazy"
+                                className="w-full rounded-md border border-[#d1c4b7] object-cover max-h-[420px]"
+                              />
+                              {block.caption && (
+                                <figcaption className="text-sm text-foreground/65 italic" style={{ fontFamily: "'Crimson Text', serif" }}>
+                                  {block.caption}
+                                </figcaption>
+                              )}
+                            </figure>
+                          )
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <p className="text-base leading-relaxed text-foreground/75" style={{ fontFamily: "'Crimson Text', serif" }}>
+                      Ainda não existe uma memória cadastrada para este mês.
+                    </p>
+                  )}
+                </div>
+              </ScrollArea>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
