@@ -48,7 +48,7 @@ export const MEMORY_ENTRIES: MemoryEntryInput[] = [
             },
             {
                 type: "image",
-                src: "/memories/defesa_mestrado.png",
+                src: "./memories/defesa_mestrado.png",
                 alt: "Foto da banca examinadora durante a defesa da tese.",
                 caption: "Foto da banca examinadora durante a defesa da tese.",
             },
